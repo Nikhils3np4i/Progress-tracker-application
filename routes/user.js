@@ -118,6 +118,31 @@ userRouter.get("/todos", userAuthMiddleware, async (req, res)=> {
     }
 })
 
+userRouter.delete("/deleteTodo", userAuthMiddleware, async(req, res)=> {
+    const userId = req.userId;
+    const todoId = req.body.todoId;
+    const response = await todoModel.findOne({
+        _id: todoId,
+        userId: userId
+    })
+
+    if(!response){
+        res.status(403).send({
+            message:"Unable to delete"
+        })
+    }
+
+    await todoModel.deleteOne({
+        _id: todoId,
+        userId: userId
+    });
+
+    res.json({
+        message:"Task Deleted"
+    })
+
+})
+
 userRouter.post("/logout", userAuthMiddleware, async(req, res)=>{
     res.clearCookie("token", {
         httpOnly: true,
