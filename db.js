@@ -12,7 +12,7 @@ const userSchema = new Schema({
 const todoSchema = new Schema({
     title: String,
     done: Boolean,
-    todoId: ObjectId
+    userId: ObjectId
 })
 
 const userModel = mongoose.model("user", userSchema);

@@ -1,8 +1,9 @@
 const express = require('express')
 const Router = express.Router;
-const { userModel } = require("../db");
+const { userModel, todoModel } = require("../db");
 const jwt = require('jsonwebtoken');
 const { user_JWT_Secret } = require('../config');
+const { userAuthMiddleware } = require('../userAuth');
 
 const userRouter = Router();
 
@@ -77,6 +78,17 @@ userRouter.post("/login", async(req, res)=> {
         })
     }
 })
+
+userRouter.post("/createTodo", userAuthMiddleware, async(req, res)=> {
+    const userId = req.userId;
+    const { title, done } = req.body;
+    await todoModel.create({
+        title,
+        done
+    });
+});
+
+
 
 module.exports = {
     userRouter: userRouter
