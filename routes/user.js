@@ -82,11 +82,42 @@ userRouter.post("/login", async(req, res)=> {
 userRouter.post("/createTodo", userAuthMiddleware, async(req, res)=> {
     const userId = req.userId;
     const { title, done } = req.body;
-    await todoModel.create({
-        title,
-        done
-    });
+    try {
+
+        await todoModel.create({
+            title,
+            done,
+            userId
+        });
+        res.json({
+            message:"Task added"
+        })
+    }catch(err){
+        console.log("Error while adding a new task "+ e)
+        res.status(500).send({
+            message:"Internal server error, Couldn't add a new task"
+        })
+    }
 });
+
+userRouter.get("/todos", userAuthMiddleware, async (req, res)=> {
+    const userId = req.userId;
+    try{
+
+        const response = await todoModel.find({
+            userId
+        })
+        res.json({
+            response
+        });
+    } catch(err){
+        console.log("Error while getting all of your Todos" + e);
+        res.status(500).send({
+            message:"Internal server error, Couldn't show all of your Tasks"
+        })
+    }
+})
+
 
 
 
