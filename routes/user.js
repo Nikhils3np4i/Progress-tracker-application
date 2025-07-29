@@ -73,7 +73,7 @@ userRouter.post("/login", async(req, res)=> {
     }catch(err){
         console.log("Error while loggin in the user " + e);
         res.status(500).send({
-            message: ""
+            message: "Internal server error"
         })
     }
 })
